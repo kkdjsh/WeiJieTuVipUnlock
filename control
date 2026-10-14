@@ -1,0 +1,8 @@
+Package: com.weiJieTu.vipunlock
+Name: WeiJieTuVipUnlock
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: 为截图永久会员解锁 Tweak
+Maintainer: ReverseEngineering
+Author: RE
+Section: Tweaks
