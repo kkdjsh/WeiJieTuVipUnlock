@@ -18,11 +18,14 @@ jobs:
           git clone --recursive https://github.com/theos/theos.git $THEOS
           echo "THEOS=$THEOS" >> $GITHUB_ENV
 
+      - name: Install ldid
+        run: |
+          brew install ldid
+
       - name: Link iOS SDK from Xcode
         run: |
           export THEOS=$HOME/theos
           mkdir -p $THEOS/sdks
-          # 用macOS自带的Xcode SDK
           SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
           echo "SDK path: $SDK_PATH"
           ln -s "$SDK_PATH" "$THEOS/sdks/iPhoneOS.sdk"
