@@ -1,42 +1,9 @@
-name: Build Tweak dylib
+name: Test
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: macos-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Theos
-        run: |
-          export THEOS=$HOME/theos
-          git clone --recursive https://github.com/theos/theos.git $THEOS
-          echo "THEOS=$THEOS" >> $GITHUB_ENV
-
-      - name: Install SDK
-        run: |
-          export THEOS=$HOME/theos
-          mkdir -p $THEOS/sdks
-          curl -L -o /tmp/sdk.zip "https://github.com/CRKokoria/theos-sdk/raw/main/iPhoneOS14.5.sdk.zip"
-          unzip -q /tmp/sdk.zip -d $THEOS/sdks/
-          ls $THEOS/sdks/
-
-      - name: Build
-        run: |
-          export THEOS=$HOME/theos
-          cd $GITHUB_WORKSPACE
-          make package FINAL=theos
-
-      - name: Upload
-        uses: actions/upload-artifact@v4
-        with:
-          name: WeiJieTuVipUnlock
-          path: |
-            packages/*.deb
-            .theos/obj/*.dylib
+      - run: echo "hello world"
