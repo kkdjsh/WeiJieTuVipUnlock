@@ -1,48 +1,19 @@
-name: Build Tweak
+name: Build
 
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+on: [push]
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Theos
+      - uses: actions/checkout@v4
+      - name: Install Theos
         run: |
-          export THEOS=$HOME/theos
-          git clone --recursive https://github.com/theos/theos.git $THEOS
-          echo "THEOS=$THEOS" >> $GITHUB_ENV
-
-      - name: Install ldid
-        run: |
-          brew install ldid
-
-      - name: Link iOS SDK from Xcode
-        run: |
-          export THEOS=$HOME/theos
-          mkdir -p $THEOS/sdks
-          SDK_PATH=$(xcrun --sdk iphoneos --show-sdk-path)
-          echo "SDK path: $SDK_PATH"
-          ln -s "$SDK_PATH" "$THEOS/sdks/iPhoneOS.sdk"
-          ls -la $THEOS/sdks/
-
+          sudo git clone --recursive https://github.com/theos/theos.git /opt/theos
+          sudo xcode-select -s /Applications/Xcode_15.4.app
       - name: Build
-        run: |
-          export THEOS=$HOME/theos
-          cd $GITHUB_WORKSPACE
-          make package FINAL=theos
-          ls -la packages/
-          ls -la .theos/obj/
-
-      - name: Upload dylib
-        uses: actions/upload-artifact@v4
+        run: make package THEOS=/opt/theos
+      - uses: actions/upload-artifact@v4
         with:
-          name: WeiJieTuVipUnlock
-          path: |
-            packages/*.deb
-            .theos/obj/*.dylib
+          name: TweakOutput
+          path: packages/*.deb
